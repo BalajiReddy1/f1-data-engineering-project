@@ -1,0 +1,104 @@
+{
+    "name": "PL_Weekly_Race_Update",
+    "objectId": "2f84dff4-f4f0-4489-9e5f-856c7bcb30e4",
+    "properties": {
+        "activities": [
+            {
+                "name": "Notebook1",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "29f96fad-43b7-418f-a236-5998f5fdcb21",
+                    "workspaceId": "4ca6d080-e38e-45ea-8493-15f73b17ee08"
+                }
+            },
+            {
+                "name": "ForEach1",
+                "type": "ForEach",
+                "dependsOn": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@variables('RaceList')",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "Notebook2",
+                            "type": "TridentNotebook",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "typeProperties": {
+                                "notebookId": "29f96fad-43b7-418f-a236-5998f5fdcb21",
+                                "workspaceId": "4ca6d080-e38e-45ea-8493-15f73b17ee08",
+                                "parameters": {
+                                    "race_name": {
+                                        "value": {
+                                            "value": "@item()",
+                                            "type": "Expression"
+                                        },
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Calculate_Gold_Stats",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ForEach1",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "d9a4445f-d6cc-4719-8754-2c123fecf5f2",
+                    "workspaceId": "4ca6d080-e38e-45ea-8493-15f73b17ee08"
+                }
+            }
+        ],
+        "parameters": {
+            "race_name": {
+                "type": "string",
+                "defaultValue": "Las Vegas"
+            }
+        },
+        "variables": {
+            "RaceList": {
+                "type": "Array",
+                "defaultValue": [
+                    "Bahrain",
+                    "Saudi Arabia",
+                    "Australia"
+                ]
+            }
+        },
+        "lastModifiedByObjectId": "056811c6-0db0-44b8-bd5d-0f9010d9b6c2",
+        "lastPublishTime": "2025-12-11T05:58:57Z"
+    }
+}
